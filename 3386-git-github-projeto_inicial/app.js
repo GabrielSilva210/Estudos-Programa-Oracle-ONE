@@ -1,73 +1,75 @@
-let listaDeNumerosSorteados = [];
-let numeroLimite = 10;
-let numeroSecreto = gerarNumeroAleatorio();
-let tentativas = 1;
+let drawnNumbersList = [];
+let limitValue = 10;
+let mysteryNumber = getRandomNumber();
+let tries = 1;
 
-function exibirTextoNaTela(tag, texto) {
-    let campo = document.querySelector(tag);
-    campo.innerHTML = texto;
-    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
+function showTextOnScreen(tag, texto) {
+    let field  = document.querySelector(tag);
+    field .innerHTML = texto;
+    // responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
 }
 
-function exibirMensagemInicial() {
-    exibirTextoNaTela('h1', 'Jogo do número secreto');
-    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
+function showInitialMessage() {
+    showTextOnScreen('h1', 'Jogo do número secreto');
+    showTextOnScreen('p', 'Escolha um número entre 1 e 10');
 }
 
-exibirMensagemInicial();
+showInitialMessage();
 
-function verificarChute() {
-    let chute = document.querySelector('input').value;
+function checkGuess () {
+    let guess = document.querySelector('input').value;
     
-    if (chute == numeroSecreto) {
-        exibirTextoNaTela('h1', 'Acertou!');
-        let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
-        let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
-        exibirTextoNaTela('p', mensagemTentativas);
-        document.getElementById('reiniciar').removeAttribute('disabled');
+    if (guess == mysteryNumber) {
+        showTextOnScreen('h1', 'Acertou!');
+        let guessedWord = tries > 1 ? 'tentativas' : 'tentativa';
+        let triesMessage = `Você descobriu o número secreto com ${tries} ${guessedWord}!`;
+        showTextOnScreen('p', triesMessage);
+        document.getElementById('reset').removeAttribute('disabled');
     } else {
-        if (chute > numeroSecreto) {
-            exibirTextoNaTela('p', 'O número secreto é menor');
+        if (guess > mysteryNumber) {
+            showTextOnScreen('p', 'O número secreto é menor');
         } else {
-            exibirTextoNaTela('p', 'O número secreto é maior');
+            showTextOnScreen('p', 'O número secreto é maior');
         }
-        tentativas++;
-        limparCampo();
+        tries++;
+        clearInput();
     }
 }
 
-function gerarNumeroAleatorio() {
-    let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
-    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
+document.getElementById('search').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        checkGuess(); 
+        const search = document.getElementById('search').value;
 
-    if (quantidadeDeElementosNaLista == numeroLimite) {
-        listaDeNumerosSorteados = [];
+        document.getElementById('search').value = '';
     }
-    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
-        return gerarNumeroAleatorio();
+});
+
+function getRandomNumber() {
+    let targetNumber = parseInt(Math.random() * limitValue + 1);
+    let listLength = drawnNumbersList.length;
+
+    if (listLength == limitValue) {
+        drawnNumbersList = [];
+    }
+    if (drawnNumbersList.includes(targetNumber)) {
+        return getRandomNumber();
     } else {
-        listaDeNumerosSorteados.push(numeroEscolhido);
-        console.log(listaDeNumerosSorteados)
-        return numeroEscolhido;
+        drawnNumbersList.push(targetNumber);
+        console.log(drawnNumbersList)
+        return targetNumber;
     }
 }
 
-function limparCampo() {
-    chute = document.querySelector('input');
-    chute.value = '';
+function clearInput() {
+    guess = document.querySelector('input');
+    guess.value = '';
 }
 
-function reiniciarJogo() {
-    numeroSecreto = gerarNumeroAleatorio();
-    limparCampo();
-    tentativas = 1;
-    exibirMensagemInicial();
-    document.getElementById('reiniciar').setAttribute('disabled', true)
+function resetGame() {
+    mysteryNumber = getRandomNumber();
+    clearInput();
+    tries = 1;
+    showInitialMessage();
+    document.getElementById('reset').setAttribute('disabled', true)
 }
-
-
-
-
-
-
-
