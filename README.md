@@ -42,5 +42,5 @@ O projeto foi desenvolvido com o propósito de praticar lógica de programação
 
 ## Autor
 
-[Seu Nome](https://github.com/seu-usuario)
+[Gabriel Gonçalves]([https://github.com/seu-usuario](https://github.com/GabrielSilva210))
 
